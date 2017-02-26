@@ -73,6 +73,7 @@ class Norminette:
             self.manage_result(json.loads(payload)))
 
     def desinitialize(self):
+        print('\r\x1b', end='')
         self.sender.desinitialize()
 
     def check(self, options):
@@ -145,10 +146,12 @@ class Norminette:
 
     def manage_result(self, result):
         if 'filename' in result:
-            print("Norme:", self.cleanify_path(result['filename']))
+            print("\r\x1b[K\x1b[;1mNorme: " + self.cleanify_path(result['filename'] + '\x1b[m'), end='')
         if 'display' in result and result['display'] is not None:
+            print()
             print(result['display'])
         if 'stop' in result and result['stop'] is True:
+            print()
             exit(0)
 
 class Parser:
