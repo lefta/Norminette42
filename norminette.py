@@ -65,9 +65,11 @@ class Sender:
 class Norminette:
     files = None
     sender = None
+    lock = None
 
     def initialize(self):
         self.files = []
+        self.lock = threading.Lock()
         self.sender = Sender()
         self.sender.initialize(lambda payload: \
             self.manage_result(json.loads(payload)))
@@ -145,11 +147,13 @@ class Norminette:
         return filename.replace(os.getcwd() + '/', '', 1)
 
     def manage_result(self, result):
+        self.lock.acquire()
         if 'filename' in result:
             print("\r\x1b[K\x1b[;1mNorme: " + self.cleanify_path(result['filename'] + '\x1b[m'), end='')
         if 'display' in result and result['display'] is not None:
             print()
             print(result['display'])
+        self.lock.release()
         if 'stop' in result and result['stop'] is True:
             print()
             exit(0)
