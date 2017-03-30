@@ -90,6 +90,7 @@ class Norminette:
             self.send_files(options)
 
         self.sender.sync()
+        print()
 
     def populate_recursive(self, objects):
         for o in objects:
